@@ -44,7 +44,7 @@ Help easily read and install the Minecraft mode pack provided by Modpack files(`
 - Neoforge 지원
 - FTB 형식 지원
 
-## Future of the this project.
+## Future of this project.
 
 - Modrinth Modpacks
 - Fabric/Forge automatic select
