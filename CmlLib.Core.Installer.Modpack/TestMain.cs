@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CmlLib.Core;
+using CmlLib.Core.Auth;
 using CmlLib.Core.Installers;
 using CmlLib.Core.Installer;
 using CmlLib.Core.Installer.Modpack;
@@ -66,7 +67,7 @@ class TestMain
             // ByteProgress: ByteProgress를 문자열로 출력
             ByteProgress = new Progress<ByteProgress>(progress =>
                 Console.WriteLine("Bytes: " + progress.ToRatio() * 100)),
-            
+            Session = MSession.CreateOfflineSession("player"),
             ServerIp = "giowqmndkl.kr",
             MaximumRamMb = maxMem,
             MinimumRamMb = 1024,

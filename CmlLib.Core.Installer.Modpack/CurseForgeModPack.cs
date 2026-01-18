@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Installer;
 using CmlLib.Core.Installer.Forge;
+using CmlLib.Core.ModLoaders.FabricMC;
 
 namespace CmlLib.Core.Installer.Modpack;
 
@@ -67,45 +68,68 @@ public sealed class CurseForgeModPack : IModPack, IAsyncDisposable
         if (string.IsNullOrWhiteSpace(options.GameDirectory))
             throw new ArgumentException("GameDirectory is required", nameof(options));
 
-        // 인스턴스 루트 = 독립 .minecraft
         var instanceDir = options.GameDirectory;
         Directory.CreateDirectory(instanceDir);
 
         var mcPath = new MinecraftPath(instanceDir);
         var launcher = new MinecraftLauncher(mcPath);
 
-        // Forge loader 선택
+        // 🔥 primary loader 자동 감지
         var loader = _manifest.minecraft.modLoaders.Find(x => x.primary)
             ?? throw new InvalidDataException("No primary mod loader");
 
-        if (!loader.id.StartsWith("forge-"))
-            throw new NotSupportedException($"Unsupported loader: {loader.id}");
+        string versionName;
 
-        var forgeVersion = loader.id["forge-".Length..];
+        // =========================
+        // Forge
+        // =========================
+        if (loader.id.StartsWith("forge-"))
+        {
+            var forgeVersion = loader.id["forge-".Length..];
+            var forgeInstaller = new ForgeInstaller(launcher);
 
-        // Forge 설치
-        var forgeInstaller = new ForgeInstaller(launcher);
+            versionName = await forgeInstaller.Install(
+                _manifest.minecraft.version,
+                forgeVersion,
+                new ForgeInstallOptions
+                {
+                    FileProgress = options.FileProgress,
+                    ByteProgress = options.ByteProgress
+                });
 
-        var versionName = await forgeInstaller.Install(
-            _manifest.minecraft.version,
-            forgeVersion,
-            new ForgeInstallOptions
-            {
-                FileProgress = options.FileProgress,
-                ByteProgress = options.ByteProgress
-            });
+            await launcher.InstallAsync(
+                versionName,
+                options.FileProgress,
+                options.ByteProgress);
+        }
+        // =========================
+        // Fabric
+        // =========================
+        else if (loader.id.StartsWith("fabric-"))
+        {
+            var fabricVersion = loader.id["fabric-".Length..];
 
-        // Minecraft 본체 설치
-        await launcher.InstallAsync(
-            versionName,
-            options.FileProgress,
-            options.ByteProgress);
+            var fabricInstaller = new FabricInstaller(new HttpClient());
 
-        // overrides 적용
+            // fabric은 MinecraftPath 기준으로 설치
+            versionName = await fabricInstaller.Install(
+                _manifest.minecraft.version,
+                fabricVersion,
+                mcPath);
+        }
+        else
+        {
+            throw new NotSupportedException($"Unsupported mod loader: {loader.id}");
+        }
+
+        // =========================
+        // Overrides
+        // =========================
         await InstallOverridesAsync(instanceDir);
 
         return versionName;
     }
+
     /// <summary>
     /// ModPack 설치 후 바로 Minecraft 프로세스를 생성
     /// </summary>

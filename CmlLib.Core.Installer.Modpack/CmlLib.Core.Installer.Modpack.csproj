@@ -5,6 +5,17 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>modpack parser      </Title>
+        <Authors>jwyoon1220</Authors>
+        <Description>ModPack Parser for CmlLib</Description>
+        <Copyright>Copyright 2026 Junwon Yoon</Copyright>
+        <PackageProjectUrl>https://github.com/jwyoon1220/CmlLib.Core.Installer.Modpack</PackageProjectUrl>
+        <PackageLicenseUrl> https://github.com/jwyoon1220/CmlLib.Core.Installer.Modpack/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/jwyoon1220/CmlLib.Core.Installer.Modpack</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <Version>1.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>

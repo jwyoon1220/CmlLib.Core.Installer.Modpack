@@ -1,4 +1,6 @@
-﻿namespace CmlLib.Core.Installer.Modpack;
+﻿using System.Diagnostics;
+
+namespace CmlLib.Core.Installer.Modpack;
 
 using CmlLib.Core;
 using CmlLib.Core.Installer;
@@ -46,4 +48,6 @@ public interface IModPack
         ModPackInstallOptions options);
 
     Task DownloadModsFromManifestAsync(string gameDir);
+
+    Task<Process> InstallAndBuildProcessAsync(ModPackInstallOptions options);
 }
