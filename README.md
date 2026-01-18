@@ -28,6 +28,7 @@ CurseForge에서 제공하는 Minecraft 모드팩(`.zip`)을 손쉽게 읽고 �
 - Fabric/Forge 자동 전환
 - Neoforge 지원
 - FTB 형식 지원
+---
 
 ## 설치
 
