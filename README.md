@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**CurseForge ModPack Parser**는 [CmlLib](https://github.com/CmlLib/CmlLib.Core)용 에드온(Add-on) 프로젝트로,  
+**CmlLib.Core.Installer.Modpack**는 [CmlLib](https://github.com/CmlLib/CmlLib.Core)용 에드온(Add-on) 프로젝트로,  
 CurseForge에서 제공하는 Minecraft 모드팩(`.zip`)을 손쉽게 읽고 설치할 수 있도록 도와줍니다.
 
 > ⚡ **주의:** 이 프로젝트는 CmlLib Minecraft 런처 라이브러리를 기반으로 동작합니다.  
@@ -21,6 +21,13 @@ CurseForge에서 제공하는 Minecraft 모드팩(`.zip`)을 손쉽게 읽고 �
 - CmlLib `Process` 빌드 지원 → 설치 후 바로 게임 실행 가능
 
 ---
+
+##추후 개선사항
+
+- Modrinth 형식의 모드팩도 가능하게
+- Fabric/Forge 자동 전환
+- Neoforge 지원
+- FTB 형식 지원
 
 ## 설치
 
