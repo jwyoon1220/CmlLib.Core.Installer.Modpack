@@ -34,6 +34,55 @@ public sealed class ModrinthModPack : IModPack, IAsyncDisposable
     {
         _zipPath = zipPath;
     }
+    private static async Task<string> DownloadZipAsync(
+        string url,
+        IProgress<double>? progress)
+    {
+        var target = Path.Combine(
+            Path.GetTempPath(),
+            "modpacks",
+            Path.GetFileName(new Uri(url).LocalPath));
+
+        Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+
+        using var http = new HttpClient();
+        using var response = await http.GetAsync(
+            url, HttpCompletionOption.ResponseHeadersRead);
+
+        response.EnsureSuccessStatusCode();
+
+        var total = response.Content.Headers.ContentLength ?? -1;
+        var canReport = total > 0 && progress != null;
+
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        await using var file = File.Create(target);
+
+        var buffer = new byte[81920];
+        long readTotal = 0;
+        int read;
+
+        while ((read = await stream.ReadAsync(buffer)) > 0)
+        {
+            await file.WriteAsync(buffer.AsMemory(0, read));
+            readTotal += read;
+
+            if (canReport)
+                progress!.Report(readTotal * 100d / total);
+        }
+
+        progress?.Report(100);
+        return target;
+    }
+    
+    public static async Task<ModrinthModPack> FromUrlAsync(
+        string url,
+        IProgress<double>? progress = null)
+    {
+        var zipPath = await DownloadZipAsync(url, progress);
+        var pack = new ModrinthModPack(zipPath);
+        await pack.LoadAsync();
+        return pack;
+    }
 
     /* =========================
      * Load
