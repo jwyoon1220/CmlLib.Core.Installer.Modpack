@@ -41,14 +41,14 @@ Help easily read and install the Minecraft mode pack provided by Modpack files(`
 
 ## 추후 개선사항
 
-- Modrinth 형식의 모드팩도 가능하게
+- ~~Modrinth 형식의 모드팩도 가능하게~~ // 만듬
 - Fabric/Forge 자동 전환
 - Neoforge 지원
 - FTB 형식 지원
 
 ## Future of this project.
 
-- Modrinth Modpacks
+- ~~Modrinth Modpacks~~ // made.
 - Fabric/Forge automatic select
 - Neoforge Support
 - FTB Support
