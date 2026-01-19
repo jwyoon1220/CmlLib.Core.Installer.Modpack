@@ -83,8 +83,11 @@ public sealed class CurseForgeModPack : IModPack, IAsyncDisposable
         // =========================
         // Forge
         // =========================
+        
+
         if (loader.id.StartsWith("forge-"))
         {
+            Console.WriteLine("forge");
             var forgeVersion = loader.id["forge-".Length..];
             var forgeInstaller = new ForgeInstaller(launcher);
 
@@ -107,6 +110,7 @@ public sealed class CurseForgeModPack : IModPack, IAsyncDisposable
         // =========================
         else if (loader.id.StartsWith("fabric-"))
         {
+            Console.WriteLine("fabric");
             var fabricVersion = loader.id["fabric-".Length..];
 
             var fabricInstaller = new FabricInstaller(new HttpClient());
@@ -116,6 +120,8 @@ public sealed class CurseForgeModPack : IModPack, IAsyncDisposable
                 _manifest.minecraft.version,
                 fabricVersion,
                 mcPath);
+
+            await launcher.InstallAsync(versionName, options.FileProgress, options.ByteProgress);
         }
         else
         {
